@@ -58,7 +58,7 @@ def generate_pagerank(path):
     print('Apply to train...')
     pagerank_feats_train = df_train.apply(get_pagerank_value, axis=1)
 
-    print('Writing train...')
+    print('Writing train features...')
     pagerank_feats_train.to_csv(os.path.join(path,"train_pagerank.csv"), index=False)
     del df_train
     gc.collect()
@@ -66,7 +66,7 @@ def generate_pagerank(path):
     print('Apply to test...')
     pagerank_feats_test = df_test.apply(get_pagerank_value, axis=1)
 
-    print('Writing test...')
+    print('Writing test features...')
     pagerank_feats_test.to_csv(os.path.join(path,"test_pagerank.csv"), index=False)
 
     print('CSV written !')
