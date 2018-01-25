@@ -67,4 +67,6 @@ def generate_question_freq(path):
     test_comb.to_csv(os.path.join(path,'test_question_freq.csv'), columns=['q1_freq', 'q2_freq', 'q1_hash', 'q2_hash'])
     #print(corr_mat)
     #print(test_comb)
-    print('CSV written ! see: ', path)
+    print('CSV written ! see: ', path, " | suffix: ", "_question_freq.csv")
+
+

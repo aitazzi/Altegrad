@@ -69,6 +69,6 @@ def generate_pagerank(path):
     print('Writing test features...')
     pagerank_feats_test.to_csv(os.path.join(path,"test_pagerank.csv"), index=False)
 
-    print('CSV written !')
+    print('CSV written ! see: ', path, " | suffix: ", "_pagerank.csv")
 
 

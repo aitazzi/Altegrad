@@ -1,77 +1,75 @@
-import networkx as nx
+import numpy as np
 import pandas as pd
 from tqdm import tqdm
+import networkx as nx
+import scipy.stats as sps
 import os
 
 
 def generate_kcores(path):
-	df_train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","label"])
-	df_test = pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
+    seed = 1024
+    np.random.seed(seed)
 
-	dfs = (df_train, df_test)
+    train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","label"])
+    test = pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
-	questions = []
-	for df in dfs:
-	    df['question1'] = df['question1'].str.lower()
-	    df['question2'] = df['question2'].str.lower()
-	    questions += df['question1'].tolist()
-	    questions += df['question2'].tolist()
+    data_all = pd.concat([train, test])[['question1','question2']]
 
-	graph = nx.Graph()
-	graph.add_nodes_from(questions)
+    #dup index
+    q_all = pd.DataFrame(np.hstack([train['question1'], test['question1'],
+                       train['question2'], test['question2']]), columns=['question'])
+    q_all = pd.DataFrame(q_all.question.value_counts()).reset_index()
 
-	for df in [df_train, df_test]:
-	    edges = list(df[['question1', 'question2']].to_records(index=False))
-	    graph.add_edges_from(edges)
-
-	graph.remove_edges_from(graph.selfloop_edges())
-
-	df = pd.DataFrame(data=graph.nodes(), columns=["question"])
-	df['kcores'] = 1
-
-	n_cores = 30
-	for k in tqdm(range(2, n_cores + 1)):
-	    ck = nx.k_core(graph, k=k).nodes()
-	    df['kcores'][df.question.isin(ck)] = k
-
-	#print(df['kcores'].value_counts())
-
-	df.to_csv(os.path.join(path,"question_kcores.csv"), index=None)
+    q_num = dict(q_all.values)
+    q_index = {}
+    for i,key in enumerate(q_num.keys()):
+        q_index[key] = i
+    data_all['q1_index'] = data_all['question1'].map(q_index)
+    data_all['q2_index'] = data_all['question2'].map(q_index)
 
 
-	df_train = pd.read_csv('./data/train.csv', sep=',',names = ["id", "qid1", "qid2", "question1","question2","label"])
-	df_test = pd.read_csv('./data/test.csv', sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
-
-	dfs = (df_train, df_test)
-
-	for df in dfs:
-	    df['question1'] = df['question1'].str.lower()
-	    df['question2'] = df['question2'].str.lower()
-	    
-	    q_kcores = pd.read_csv('data/question_kcores.csv', encoding="ISO-8859-1")
-	    
-	    q_kcores['question1'] = q_kcores['question']
-	    del q_kcores['question']
-	    df['q1_kcores'] = df.merge(q_kcores, 'left')['kcores']
-	    
-	    q_kcores['question2'] = q_kcores['question1']
-	    del q_kcores['question1']
-	    df['q2_kcores'] = df.merge(q_kcores, 'left')['kcores']
-	    
-	    df['q1_q2_kcores_ratio'] = (df['q1_kcores'] / df['q2_kcores']).apply(lambda x: x if x < 1. else 1./x)
-	    df['q1_q2_kcores_diff'] = (df['q1_kcores'] - df['q2_kcores']).apply(abs)
-	    df['q1_q2_kcores_diff_normed'] = (df['q1_kcores'] - df['q2_kcores']).apply(abs) / (df['q1_kcores'] + df['q2_kcores'])
-
-	df_train, df_test = dfs
-	df_train = df_train[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 'q1_q2_kcores_diff_normed']]
-	df_test = df_test[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 'q1_q2_kcores_diff_normed']]
+    #link edges
+    q_list = {}
+    dd = data_all[['q1_index','q2_index']].values
+    for i in tqdm(np.arange(data_all.shape[0])):
+    #for i in np.arange(dd.shape[0]):
+        q1,q2=dd[i]
+        if q_list.setdefault(q1,[q2])!=[q2]:
+            q_list[q1].append(q2)
+        if q_list.setdefault(q2,[q1])!=[q1]:
+            q_list[q2].append(q1)
 
 
-	print('Writing train features...')
-	df_train.to_csv(os.path.join(path,'train_kcores.csv'))
+    common_fea = np.zeros((data_all.shape[0],3))
+    for i in tqdm(np.arange(data_all.shape[0])):
+        q1,q2 = dd[i]
+        if (q1 not in q_list)|(q2 not in q_list):
+            continue
+        nei_q1 = set(q_list[q1])
+        nei_q2 = set(q_list[q2])
 
-	print('Writing test features...')
-	df_test.to_csv(os.path.join(path,'test_kcores.csv'))
+        f_1 = len(nei_q1.intersection(nei_q2))
+        common_fea[i][0] = f_1
+        common_fea[i][1] = len(nei_q1)
+        common_fea[i][2] = len(nei_q2)
 
-	print('CSV written ! see: ', path)
+    train_common = common_fea[:train.shape[0]]
+    test_common = common_fea[train.shape[0]:]
+
+    # pd.to_pickle(train_common,'data/train_neigh.pkl')
+    # pd.to_pickle(test_common,'data/test_neigh.pkl')
+    train_cores=pd.DataFrame(train_common, columns=['core1','core2','core3'])
+    test_cores=pd.DataFrame(test_common, columns=['core1','core2','core3'])
+
+
+    
+    print('Writing train features...')
+    train_cores.to_csv(os.path.join(path,'train_kcores.csv'))
+
+    print('Writing test features...')
+    test_cores.to_csv(os.path.join(path,'test_kcores.csv'))
+
+    print('CSV written ! see: ', path, " | suffix: ", "_kcores.csv")
+
+
 

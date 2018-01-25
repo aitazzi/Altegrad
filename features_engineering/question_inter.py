@@ -30,4 +30,4 @@ def generate_question_inter(path):
 	print('Writing test features...')  
 	test_feat.to_csv(os.path.join(path,'test_question_inter.csv'))
 
-	print('CSV written ! see: ', path)
+	print('CSV written ! see: ', path, " | suffix: ", "_question_inter.csv")
