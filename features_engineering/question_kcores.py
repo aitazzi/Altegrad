@@ -63,8 +63,8 @@ def generate_question_kcores(path):
 	    df['q1_q2_kcores_diff_normed'] = (df['q1_kcores'] - df['q2_kcores']).apply(abs) / (df['q1_kcores'] + df['q2_kcores'])
 
 	df_train, df_test = dfs
-	df_train = df_train[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 'q1_q2_kcores_diff_normed']]
-	df_test = df_test[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 'q1_q2_kcores_diff_normed']]
+	df_train = df_train[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 'q1_q2_kcores_diff_normed']].astype("float64")
+	df_test = df_test[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 'q1_q2_kcores_diff_normed']].astype("float64")
 
 
 	print('Writing train features...')
