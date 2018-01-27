@@ -1,6 +1,9 @@
 .ipynb_checkpoints/
 glove.42B.300d.txt
+submission_file.csv
 
 features_engineering/__pycache__/
 floydhub/
+__pycache__/
+
 

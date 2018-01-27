@@ -1,0 +1,14 @@
+
+
+
+
+# NetworkX
+------------------------
+pip install networkx==1.11
+
+
+# xgboost 0.6a2
+------------------------
+brew install gcc5
+pip install xgboost==0.6a2
+

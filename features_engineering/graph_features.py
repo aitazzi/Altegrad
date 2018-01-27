@@ -6,7 +6,15 @@ from tqdm import tqdm
 
 
 def generate_graph_features(path):
+    """
+    Generate graph features for Quora question data. Features will be written in a csv file in path folder.
 
+    Args:
+        path: folder containing train.csv and test.csv and to write csv features file.
+
+    Return:
+        
+    """
 	train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	test =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
