@@ -59,9 +59,9 @@ def generate_graph_features(path):
 	    train.loc[index,'clique_size'] = nx.node_clique_number(G,train['qid1'][index])
 	    #train.loc[index,'number_of_clique'] = nx.number_of_cliques(G,train['qid1'][index])
 
-	train.drop(['qid1','qid2'],axis=1)
+	train = train.drop(['qid1','qid2'],axis=1)
 
-	print('Writing train features...')	    
+	print('Writing train features...')
 	train.to_csv(os.path.join(path,'train_graph_feat.csv'))
 
 	print('Computing test features')
@@ -79,7 +79,7 @@ def generate_graph_features(path):
 	    test.loc[index,'clique_size'] = nx.node_clique_number(G,test['qid1'][index])
 	    #test.loc[index,'number_of_clique'] = nx.number_of_cliques(G,test['qid1'][index])
 
-	test.drop(['qid1','qid2'],axis=1)
+	test = test.drop(['qid1','qid2'],axis=1)
 
 	print('Writing test features...')	    
 	test.to_csv(os.path.join(path,'test_graph_feat.csv'))
