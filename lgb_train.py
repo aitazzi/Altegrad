@@ -6,8 +6,8 @@ import csv
 from datetime import datetime
 
 
-def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_prediction=False):
-    NUM_FOLDS = 5
+def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_prediction=False, num_folds=5):
+    NUM_FOLDS = num_folds
     RANDOM_SEED = 2017
     np.random.seed(RANDOM_SEED)
     kfold = StratifiedKFold(
@@ -25,9 +25,6 @@ def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_predicti
     X_test_values=X_test.values
     for fold_num, (ix_train, ix_val) in enumerate(kfold.split(X_train_values, Y_train)):
         print('Fitting fold {fold_num + 1} of {kfold.n_splits}')
-        
-        print(len(ix_train))
-        print(X_train_values.shape)
         X_fold_train = X_train_values[ix_train,:]
         X_fold_val = X_train_values[ix_val,:]
 

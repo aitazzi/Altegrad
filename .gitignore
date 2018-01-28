@@ -6,4 +6,5 @@ features_engineering/__pycache__/
 floydhub/
 __pycache__/
 
-
+.floydexpt
+.floydignore
