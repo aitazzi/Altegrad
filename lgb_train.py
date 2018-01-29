@@ -85,3 +85,5 @@ def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_predicti
                 f.write(str(i)+','+str(y_test[i])+'\n')
         print('Submission file written !')
 
+    return feat_imp
+

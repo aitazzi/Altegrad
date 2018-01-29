@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import numpy as np
 from tqdm import tqdm
+from networkx.exception import NetworkXNoPath
 
 
 def generate_graph_features(path):
@@ -15,7 +16,7 @@ def generate_graph_features(path):
     Return:
         
     """
-	train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
+    train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	test =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
 	train = train.drop(['id','question1','question2', 'is_duplicate'], axis=1)
@@ -36,12 +37,6 @@ def generate_graph_features(path):
 	print('Number of edges:', G.number_of_edges())
 
 
-	train['q1_neigh'] = np.nan; train['q2_neigh'] = np.nan
-	train['common_neigh'] = np.nan; train['distinct_neigh'] = np.nan
-	#train['all_simple_paths_3'] =  np.nan #TOO LONG !
-	train['clique_size'] = np.nan
-	#train['number_of_clique'] = np.nan #TOO LONG !
-
 
 	# Computing train features
 	print('Computing train features')
@@ -58,6 +53,13 @@ def generate_graph_features(path):
 	    
 	    train.loc[index,'clique_size'] = nx.node_clique_number(G,train['qid1'][index])
 	    #train.loc[index,'number_of_clique'] = nx.number_of_cliques(G,train['qid1'][index])
+
+	    G.remove_edge(train['qid1'][index],train['qid2'][index])
+	    try:
+	    	train.loc[index,'shortest_path'] = nx.shortest_path_length(G, train['qid1'][index], train['qid2'][index])
+		except NetworkXNoPath:
+	    	train.loc[index,'shortest_path'] = 10
+	    G.add_edge(train['qid1'][index],train['qid2'][index])
 
 	train = train.drop(['qid1','qid2'],axis=1)
 
@@ -78,6 +80,13 @@ def generate_graph_features(path):
 	    
 	    test.loc[index,'clique_size'] = nx.node_clique_number(G,test['qid1'][index])
 	    #test.loc[index,'number_of_clique'] = nx.number_of_cliques(G,test['qid1'][index])
+
+	   	G.remove_edge(test['qid1'][index],test['qid2'][index])
+	    try:
+	    	test.loc[index,'shortest_path'] = nx.shortest_path_length(G, test['qid1'][index], test['qid2'][index])
+		except NetworkXNoPath:
+	    	test.loc[index,'shortest_path'] = 10
+	    G.add_edge(test['qid1'][index],test['qid2'][index])
 
 	test = test.drop(['qid1','qid2'],axis=1)
 
