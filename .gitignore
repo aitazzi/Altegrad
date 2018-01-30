@@ -8,3 +8,5 @@ __pycache__/
 
 .floydexpt
 .floydignore
+
+data/.floyddata

@@ -8,15 +8,15 @@ from networkx.exception import NetworkXNoPath
 
 def generate_graph_features(path):
     """
-    Generate graph features for Quora question data. Features will be written in a csv file in path folder.
+	Generate graph features for Quora question data. Features will be written in a csv file in path folder.
 
-    Args:
-        path: folder containing train.csv and test.csv and to write csv features file.
+	Args:
+	    path: folder containing train.csv and test.csv and to write csv features file.
 
-    Return:
-        
-    """
-    train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
+	Return:
+
+	"""
+	train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	test =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
 	train = train.drop(['id','question1','question2', 'is_duplicate'], axis=1)
@@ -29,36 +29,35 @@ def generate_graph_features(path):
 
 	edge_list = []
 	for index, row in train_test.iterrows():
-		edge_list.append([train_test['qid1'][index],train_test['qid2'][index]])
+	    edge_list.append([train_test['qid1'][index],train_test['qid2'][index]])
 
 	G.add_edges_from(edge_list)
 
 	print('Number of nodes:', G.number_of_nodes())
 	print('Number of edges:', G.number_of_edges())
 
-
-
 	# Computing train features
 	print('Computing train features')
 	for index, row in tqdm(train.iterrows()):
 	    neigh_1 = G.neighbors(train['qid1'][index])
 	    neigh_2 = G.neighbors(train['qid2'][index])
-	    
+
 	    train.loc[index,'q1_neigh'] = len(neigh_1)
 	    train.loc[index,'q2_neigh'] = len(neigh_2)
 	    train.loc[index,'common_neigh'] = len(list(nx.common_neighbors(G,train['qid1'][index],train['qid2'][index])))
 	    train.loc[index,'distinct_neigh'] = len(neigh_1)+len(neigh_2)-len(list(nx.common_neighbors(G,train['qid1'][index],train['qid2'][index])))
-	    
+
 	    #train.loc[index,'all_simple_paths_3'] = len(list(nx.all_simple_paths(G,train['qid1'][index],train['qid2'][index])))
-	    
+
 	    train.loc[index,'clique_size'] = nx.node_clique_number(G,train['qid1'][index])
 	    #train.loc[index,'number_of_clique'] = nx.number_of_cliques(G,train['qid1'][index])
 
+	    #Cut the edge to compute features
 	    G.remove_edge(train['qid1'][index],train['qid2'][index])
 	    try:
-	    	train.loc[index,'shortest_path'] = nx.shortest_path_length(G, train['qid1'][index], train['qid2'][index])
-		except NetworkXNoPath:
-	    	train.loc[index,'shortest_path'] = 10
+	        train.loc[index,'shortest_path'] = nx.shortest_path_length(G, train['qid1'][index], train['qid2'][index])
+	    except NetworkXNoPath:
+	        train.loc[index,'shortest_path'] = 10
 	    G.add_edge(train['qid1'][index],train['qid2'][index])
 
 	train = train.drop(['qid1','qid2'],axis=1)
@@ -70,30 +69,28 @@ def generate_graph_features(path):
 	for index, row in tqdm(test.iterrows()):
 	    neigh_1 = G.neighbors(test['qid1'][index])
 	    neigh_2 = G.neighbors(test['qid2'][index])
-	    
+
 	    test.loc[index,'q1_neigh'] = len(neigh_1)
 	    test.loc[index,'q2_neigh'] = len(neigh_2)
 	    test.loc[index,'common_neigh'] = len(list(nx.common_neighbors(G,test['qid1'][index],test['qid2'][index])))
 	    test.loc[index,'distinct_neigh'] = len(neigh_1)+len(neigh_2)-len(list(nx.common_neighbors(G,test['qid1'][index],test['qid2'][index])))
-	    
+
 	    #test.loc[index,'all_simple_paths_3'] = len(list(nx.all_simple_paths(G,test['qid1'][index],test['qid2'][index])))
-	    
+
 	    test.loc[index,'clique_size'] = nx.node_clique_number(G,test['qid1'][index])
 	    #test.loc[index,'number_of_clique'] = nx.number_of_cliques(G,test['qid1'][index])
 
-	   	G.remove_edge(test['qid1'][index],test['qid2'][index])
+	    #Cut the edge to compute features
+	    G.remove_edge(test['qid1'][index],test['qid2'][index])
 	    try:
-	    	test.loc[index,'shortest_path'] = nx.shortest_path_length(G, test['qid1'][index], test['qid2'][index])
-		except NetworkXNoPath:
-	    	test.loc[index,'shortest_path'] = 10
+	        test.loc[index,'shortest_path'] = nx.shortest_path_length(G, test['qid1'][index], test['qid2'][index])
+	    except NetworkXNoPath:
+	        test.loc[index,'shortest_path'] = 10
 	    G.add_edge(test['qid1'][index],test['qid2'][index])
 
 	test = test.drop(['qid1','qid2'],axis=1)
 
-	print('Writing test features...')	    
+	print('Writing test features...')    
 	test.to_csv(os.path.join(path,'test_graph_feat.csv'))
 
 	print('CSV written ! see: ', path, " | suffix: ", "_graph_feat.csv")
-
-
-
