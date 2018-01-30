@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 from networkx.exception import NetworkXNoPath
 
-def generate_weightedgraph_features(path, manual_cv):
+def generate_weightedgraph_features(path, manual_cv=False):
 	train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	test =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
