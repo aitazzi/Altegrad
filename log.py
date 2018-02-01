@@ -4,8 +4,15 @@ import csv
 
 def _check_log_directory(directory):
     """
-    Check that the log directory exists and create it if it doesn't
+    Check that the log directory exists and create it if it doesn't.
+
+    Args:
+        directory: log directory path.
+
+    Return:
+
     """
+
     try:
         if not os.path.exists(directory):
             print("Attempting to make log directory at " + directory)
@@ -15,7 +22,15 @@ def _check_log_directory(directory):
 
 
 def _initialise_model_log(log_filepath):
-    """Create a model logging file if it doesn't already exist"""
+    """Create a model logging file if it doesn't already exist.
+
+    Args:
+        log_filepath: log file path.
+
+    Return:
+
+    """
+
     if not os.path.exists(log_filepath):
         with open(log_filepath, 'a') as fp:
             a = csv.writer(fp, delimiter=',')

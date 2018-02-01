@@ -6,7 +6,7 @@ def load_features(data_dir):
 	Load graph features in data_dir
 
 	Args:
-	    path: directory containing csv files with features
+	    path: directory containing csv files with features.
 
 	Return:
 		features_train: pandas Dataframe containing all features for training set.

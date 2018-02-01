@@ -7,15 +7,35 @@ from datetime import datetime
 
 
 def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_prediction=False, num_folds=5):
+    """
+    Load graph features in data_dir
+
+    Args:
+        X_train: pandas Dataframe containing the training set.
+        X_test: pandas Dataframe containing the test set.
+        Y_train: pandas Dataframe containing the labels for training set.
+        lgb_params: Dictionnary with lgb parameters
+        log_filepath: log file path to write model set up and results
+        test_prediction: Boolean, if the submission file should be written or not
+        num_folds: Number of folds for the cross-validation.
+
+    Return:
+        features_train: pandas Dataframe containing all features for training set.
+        features_test: pandas Dataframe containing all features for test set.
+    """
+
     NUM_FOLDS = num_folds
     RANDOM_SEED = 2017
     np.random.seed(RANDOM_SEED)
+
+    # Initialize folds for the cross-validation
     kfold = StratifiedKFold(
         n_splits=NUM_FOLDS,
         shuffle=True,
         random_state=RANDOM_SEED
     )
 
+    # Initialize the matrix for the test prediction lists for cross-val scores
     y_test_pred = np.zeros((len(X_test), NUM_FOLDS))
     cv_val_scores = []
     cv_train_scores = []
@@ -24,7 +44,8 @@ def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_predicti
     X_train_values=X_train.values
     X_test_values=X_test.values
     for fold_num, (ix_train, ix_val) in enumerate(kfold.split(X_train_values, Y_train)):
-        print('Fitting fold {fold_num + 1} of {kfold.n_splits}')
+
+        # Prepare train and validation set
         X_fold_train = X_train_values[ix_train,:]
         X_fold_val = X_train_values[ix_val,:]
 
@@ -37,6 +58,7 @@ def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_predicti
         lgb_data_val = lgb.Dataset(X_fold_val, y_fold_val)    
         evals_result = {}
         
+        # Training
         model = lgb.train(
             lgb_params,
             lgb_data_train,
@@ -60,7 +82,7 @@ def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_predicti
         cv_val_scores.append(fold_val_scores[-1])
         y_test_pred[:, fold_num] = model.predict(X_test_values).reshape(-1)
 
-
+    # Generate features importance matrix
     feat_imp = pd.DataFrame({
     'column': list(X_train.columns),
     'importance': model.feature_importance()}).sort_values(by='importance')
