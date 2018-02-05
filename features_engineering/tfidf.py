@@ -35,45 +35,50 @@ def word_match_share(row, stops=None):
     R = (len(shared_words_in_q1) + len(shared_words_in_q2))/(len(q1words) + len(q2words))
     return R
 
-'''
-This function defines the jaccard index as the size of the intersection of q1 and q2 divided by the size of 
-the union:
-'''
 def jaccard(row):
+    '''
+    This function defines the jaccard index as the size of the intersection of q1 and q2 divided by the size of 
+    the union:
+    '''
     wic = set(row['question1']).intersection(set(row['question2']))
     uw = set(row['question1']).union(row['question2'])
     if len(uw) == 0:
         uw = [1]
     return (len(wic) / len(uw))
 
-'''
-This function computes the number of common words between q1 and q2
-'''
     
 def common_words(row):
+    '''
+    This function computes the number of common words between q1 and q2
+    '''
     return len(set(row['question1']).intersection(set(row['question2'])))
-'''
-This function computes the number of unique words of q1 and q2 combined
-'''    
+  
+
 def total_unique_words(row):
+    '''
+    This function computes the number of unique words of q1 and q2 combined
+    '''  
     return len(set(row['question1']).union(row['question2']))
 
-'''
-This function computes the number of unique words of q1 and q2 combined excluding stop words
-'''  
+
 def total_unq_words_stop(row, stops):
+    '''
+    This function computes the number of unique words of q1 and q2 combined excluding stop words
+    '''  
     return len([x for x in set(row['question1']).union(row['question2']) if x not in stops])
 
-'''
-This function computes the difference of length between q1 and q2
-''' 
+
 def wc_diff(row):
+    '''
+    This function computes the difference of length between q1 and q2
+    ''' 
     return abs(len(row['question1']) - len(row['question2']))
 
-'''
-This function computes the ration of length between q1 and q2
-''' 
-def wc_ratio(row):
+
+def wc_ratio(row):   
+    '''
+    This function computes the ration of length between q1 and q2
+    ''' 
     l1 = len(row['question1'])*1.0 
     l2 = len(row['question2'])
     if l2 == 0:
@@ -83,10 +88,10 @@ def wc_ratio(row):
     else:
         return l1 / l2
 
-'''
-This function computes the absolute difference of length between q1 and q2
-''' 
 def wc_diff_unique(row):
+    '''
+    This function computes the absolute difference of length between q1 and q2
+    ''' 
     return abs(len(set(row['question1'])) - len(set(row['question2'])))
 
 def wc_ratio_unique(row):
@@ -99,10 +104,11 @@ def wc_ratio_unique(row):
     else:
         return l1 / l2
         
-'''
-This function computes the difference of length between q1 and q2 excluding stop words
-'''
+
 def wc_diff_unique_stop(row, stops=None):
+    '''
+    This function computes the difference of length between q1 and q2 excluding stop words
+    '''
     return abs(len([x for x in set(row['question1']) if x not in stops]) - len([x for x in set(row['question2']) if x not in stops]))
  
 def wc_ratio_unique_stop(row, stops=None):
@@ -115,24 +121,26 @@ def wc_ratio_unique_stop(row, stops=None):
     else:
         return l1 / l2
 
-'''
-This function is a bolean that computes weither q1 and q2 have the same start or not
-'''
 def same_start_word(row):
+    '''
+    This function is a bolean that computes weither q1 and q2 have the same start or not
+    '''
     if not row['question1'] or not row['question2']:
         return np.nan
     return int(row['question1'][0] == row['question2'][0])
 
-'''
-This function returns the difference of length between the characters of q1 and q2
-'''
+
 def char_diff(row):
+    '''
+    This function returns the difference of length between the characters of q1 and q2
+    '''
     return abs(len(''.join(row['question1'])) - len(''.join(row['question2'])))
 
-'''
-This function returns the ratio of length between the characters of q1 and q2
-'''
+
 def char_ratio(row):
+    '''
+    This function returns the ratio of length between the characters of q1 and q2
+    '''
     l1 = len(''.join(row['question1'])) 
     l2 = len(''.join(row['question2']))
     if l2 == 0:
@@ -142,23 +150,26 @@ def char_ratio(row):
     else:
         return l1 / l2
 
+
 def char_diff_unique_stop(row, stops=None):
     return abs(len(''.join([x for x in set(row['question1']) if x not in stops])) - len(''.join([x for x in set(row['question2']) if x not in stops])))
 
-'''
-This function returns weights to attribute to words with high frequency
-'''
 
 def get_weight(count, eps=10000, min_count=2):
+    '''
+    This function returns weights to attribute to words with high frequency
+    '''
     if count < min_count:
         return 0
     else:
         return 1 / (count + eps)
-'''
-This function returns the ratio of weights of shared words between q1 and q2 and the total weights (it is based
-on attributing weights according to frequencies which explains the name tfidf). Here we exclude stop words
-'''  
+
+
 def tfidf_word_match_share_stops(row, stops=None, weights=None):
+    '''
+    This function returns the ratio of weights of shared words between q1 and q2 and the total weights (it is based
+    on attributing weights according to frequencies which explains the name tfidf). Here we exclude stop words
+    '''  
     q1words = {}
     q2words = {}
     for word in row['question1']:
@@ -176,10 +187,12 @@ def tfidf_word_match_share_stops(row, stops=None, weights=None):
     
     R = np.sum(shared_weights) / np.sum(total_weights)
     return R
-'''
-    This function has the same idea as the previous function but here we include stop words
-'''
+
+
 def tfidf_word_match_share(row, weights=None):
+    '''
+    This function has the same idea as the previous function but here we include stop words
+    '''
     q1words = {}
     q2words = {}
     for word in row['question1']:
@@ -196,13 +209,14 @@ def tfidf_word_match_share(row, weights=None):
     R = np.sum(shared_weights) / np.sum(total_weights)
     return R
 
-'''
-This function allows to organize the different features in a pandas table in order to add theme to the data
-'''
+
 def build_features(data, stops, weights):
+    '''
+    This function allows to organize the different features in a pandas table in order to add theme to the data
+    '''
     X = pd.DataFrame()
 
-    print('world_match')
+    print('word_match')
     f = functools.partial(word_match_share, stops=stops)
     X['word_match'] = data.apply(f, axis=1, raw=True) #1
 
@@ -214,7 +228,7 @@ def build_features(data, stops, weights):
     f = functools.partial(tfidf_word_match_share_stops, stops=stops, weights=weights)
     X['tfidf_wm_stops'] = data.apply(f, axis=1, raw=True) #3
 
-    print("jaccard, wc_diff; wc_ratio, wc_diff_unique, wc_ratio_unique")
+    print("jaccard, wc_diff, wc_ratio, wc_diff_unique, wc_ratio_unique")
     X['jaccard'] = data.apply(jaccard, axis=1, raw=True) #4
     X['wc_diff'] = data.apply(wc_diff, axis=1, raw=True) #5
     X['wc_ratio'] = data.apply(wc_ratio, axis=1, raw=True) #6

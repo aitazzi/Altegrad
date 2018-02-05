@@ -57,7 +57,7 @@ def generate_question_kcores(path):
 
 	# Load training and test set
 	df_train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","label"])
-	df_test = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
+	df_test = pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
 	dfs = (df_train, df_test)
 	for df in dfs:

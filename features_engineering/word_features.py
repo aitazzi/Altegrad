@@ -10,8 +10,10 @@ import os
 
 def generate_word_features(path):
 	"""
-	This function allows to compute the shared words between q1 and q2, the shared 2grams between q1 and q2 and 
-	counting of special questions words: 'who', 'where', 'what',....
+	Generate basically question words features such as question lengths (and their difference), 
+	stopwords ratios, shared words, caps counts (and their difference), words lengths 
+	(and their difference), average words lengths (and their difference) and counts of 
+	special question words such as "What", "When", "Who"...
 
 	Args:
 	    path: folder containing train.csv and test.csv and to write csv features file.
@@ -65,13 +67,13 @@ def generate_word_features(path):
 			R2gram = len(shared_2gram) / (len(q1_2gram) + len(q2_2gram))
 		return '{}:{}:{}:{}:{}:{}:{}:{}'.format(R1, R2, len(shared_words), R31, R32, R2gram, Rcosine, words_hamming)
 
+	# Load training and test set
 	df_train =pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	df_train = df_train.fillna(' ')
-
 	df_test=  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 	df_test = df_test.fillna(' ')
 
-	# explore
+	# Set stopwords
 	stops = set(stopwords.words("english"))
 
 	df_train['question1'] = df_train['question1'].map(lambda x: str(x).lower().split())
@@ -87,6 +89,7 @@ def generate_word_features(path):
 	df['word_shares'] = df.apply(word_shares, axis=1, raw=True)
 	x = pd.DataFrame()
 
+	# Compute features
 	x['tfidf_word_match'] = df['word_shares'].apply(lambda x: float(x.split(':')[1]))
 	x['shared_count']     = df['word_shares'].apply(lambda x: float(x.split(':')[2]))
 
