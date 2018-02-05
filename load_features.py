@@ -34,10 +34,6 @@ def load_features(data_dir):
 	train_question_inter= pd.read_csv(data_dir+'train_question_inter.csv', sep=',', index_col=0)
 	test_question_inter = pd.read_csv(data_dir+'test_question_inter.csv', sep=',', index_col=0)
 
-	# K-cores
-	train_kcores = pd.read_csv(data_dir+'train_kcores.csv', sep=',', index_col=0)
-	test_kcores = pd.read_csv(data_dir+'test_kcores.csv', sep=',', index_col=0)
-
 	# question K-cores
 	train_question_kcores = pd.read_csv(data_dir+'train_question_kcores.csv', sep=',', index_col=0)
 	test_question_kcores = pd.read_csv(data_dir+'test_question_kcores.csv', sep=',', index_col=0)
@@ -90,10 +86,6 @@ def load_features(data_dir):
 	# Add intersection of questions features
 	features_train['q1_q2_intersect']=train_question_inter['q1_q2_intersect']
 	features_test['q1_q2_intersect']=test_question_inter['q1_q2_intersect']
-
-	# Add K-cores
-	features_train[["core1","core2","core3"]] = train_kcores[["core1","core2","core3"]]
-	features_test[["core1","core2","core3"]] = test_kcores[["core1","core2","core3"]]
 
 	# Add question K-cores features
 	features_train[['q1_kcores', 'q2_kcores', 'q1_q2_kcores_ratio', 'q1_q2_kcores_diff', 

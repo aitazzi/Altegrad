@@ -6,7 +6,7 @@ from tqdm import tqdm
 from networkx.exception import NetworkXNoPath
 
 def generate_weightedgraph_features(path, manual_cv=False):
-    """
+	"""
 	Generate weighted graph features for Quora question data. 
 	Features will be written in a csv file in path folder.
 
@@ -17,11 +17,11 @@ def generate_weightedgraph_features(path, manual_cv=False):
 
 	"""
 
-    # Load training and test set
+	# Load training and test set
 	train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	test =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
-    # Drop useless columns
+	# Drop useless columns
 	train = train.drop(['id','question1','question2'], axis=1)
 	test = test.drop(['id','question1','question2'], axis=1)
 
@@ -112,4 +112,4 @@ def generate_weightedgraph_features(path, manual_cv=False):
 	print('Writing test features...')
 	test.to_csv(os.path.join(path,'test_weightedgraph_feat.csv'))
 
-	print('CSV written ! see: ', path, " | suffix: ", "_weightedgraph_feat2.csv")
+	print('CSV written ! see: ', path, " | suffix: ", "_weightedgraph_feat.csv")

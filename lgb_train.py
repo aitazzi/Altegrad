@@ -20,8 +20,7 @@ def lgb_train(X_train, X_test, Y_train, lgb_params_, log_filepath, test_predicti
         num_folds: Number of folds for the cross-validation.
 
     Return:
-        features_train: pandas Dataframe containing all features for training set.
-        features_test: pandas Dataframe containing all features for test set.
+        feat_imp: pandas Dataframe containing feature importance given by the lighgb.
     """
 
     NUM_FOLDS = num_folds
