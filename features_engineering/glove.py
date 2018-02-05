@@ -4,7 +4,7 @@ import pandas as pd
 
 def generate_glove_features(path, word2vec_filepath, googlenews_filepath):
 	"""
-    Generate glove features featuresfor Quora question data. 
+    Generate glove features for Quora questions data. 
     Features will be written in a csv file in path folder.
 
     Args:

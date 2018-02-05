@@ -7,8 +7,8 @@ from networkx.exception import NetworkXNoPath
 
 
 def generate_graph_features(path):
-    """
-	Generate graph features for Quora question data. 
+	"""
+	Generate graph features for Quora questions data. 
 	Features will be written in a csv file in path folder.
 
 	Args:
@@ -18,11 +18,11 @@ def generate_graph_features(path):
 
 	"""
 
-    # Load training and test set
+	# Load training and test set
 	train = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	test =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
-    # Drop useless columns
+	# Drop useless columns
 	train = train.drop(['id','question1','question2', 'is_duplicate'], axis=1)
 	test = test.drop(['id','question1','question2'], axis=1)
 
@@ -67,7 +67,7 @@ def generate_graph_features(path):
 	        train.loc[index,'shortest_path'] = nx.shortest_path_length(G, train['qid1'][index], train['qid2'][index])
 	    except NetworkXNoPath:
 	        train.loc[index,'shortest_path'] = 10
-    	# Reset the edge
+		# Reset the edge
 	    G.add_edge(train['qid1'][index],train['qid2'][index])
 
 	# Drop the useless columns

@@ -9,16 +9,15 @@ import os
 
 
 def generate_word_features(path):
-	'''
-    This function allows to compute the shared words between q1 and q2
-    and what is new here is computing the number of shared  2grams between q1 and q2 and also counting of questions
-    with 'who', 'where', 'what',....
+	"""
+	This function allows to compute the shared words between q1 and q2, the shared 2grams between q1 and q2 and 
+	counting of special questions words: 'who', 'where', 'what',....
 
-    Args:
-        path: folder containing train.csv and test.csv and to write csv features file.
-    Return:
-    
-	'''
+	Args:
+	    path: folder containing train.csv and test.csv and to write csv features file.
+	Return:
+	
+	"""
 	def add_word_count(x, df, word):
 		x['q1_' + word] = df['question1'].apply(lambda x: (word in str(x).lower())*1)
 		x['q2_' + word] = df['question2'].apply(lambda x: (word in str(x).lower())*1)

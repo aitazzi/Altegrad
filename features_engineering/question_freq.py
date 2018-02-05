@@ -12,6 +12,18 @@ import sys
 import os
 
 def generate_question_freq(path):
+    """
+    Generate graph features for Quora questions data. 
+    Features will be written in a csv file in path folder.
+
+    Args:
+        path: folder containing train.csv and test.csv and to write csv features file.
+
+    Return:
+
+    """
+
+    # Load training and test set
     train_orig = pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
     test_orig =  pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])
 
@@ -65,8 +77,7 @@ def generate_question_freq(path):
     train_comb.to_csv(os.path.join(path,'train_question_freq.csv'), columns=['q1_freq', 'q2_freq', 'q1_hash', 'q2_hash'])
     print('Writing test features...')    
     test_comb.to_csv(os.path.join(path,'test_question_freq.csv'), columns=['q1_freq', 'q2_freq', 'q1_hash', 'q2_hash'])
-    #print(corr_mat)
-    #print(test_comb)
+
     print('CSV written ! see: ', path, " | suffix: ", "_question_freq.csv")
 
 

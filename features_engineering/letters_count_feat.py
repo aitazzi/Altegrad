@@ -5,7 +5,7 @@ import os
 def generate_letters_count_features(path):
     """
     This function count the number of letters (from 'a' to 'z') and the number of voyelsin q1 and q2, it counts also 
-    the number of spaces and words.
+    the number of spaces and words for Quora questions data.
 
     Args:
         path: folder containing train.csv and test.csv and to write csv features file.
