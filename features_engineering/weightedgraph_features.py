@@ -7,7 +7,7 @@ from networkx.exception import NetworkXNoPath
 
 def generate_weightedgraph_features(path, manual_cv=False):
 	"""
-	Generate weighted graph features for Quora question data. 
+	Generate weighted graph features for question pairs data. 
 	Features will be written in a csv file in path folder.
 
 	Args:

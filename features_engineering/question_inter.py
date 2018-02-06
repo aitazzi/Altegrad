@@ -6,7 +6,7 @@ import os
 
 def generate_question_inter(path):
 	"""
-	Generate vocabulary intersection Quora question data. 
+	Generate vocabulary intersection for question pairs data.  
 	Features will be written in a csv file in path folder.
 
 	Args:

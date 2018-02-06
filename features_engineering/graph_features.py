@@ -8,7 +8,7 @@ from networkx.exception import NetworkXNoPath
 
 def generate_graph_features(path):
 	"""
-	Generate graph features for Quora questions data. 
+	Generate graph features for question pairs data. 
 	Features will be written in a csv file in path folder.
 
 	Args:

@@ -7,7 +7,7 @@ import spacy
 
 def generate_spacy_features(path):
     """
-    Generate SpaCy features (https://spacy.io) for Quora questions data. 
+    Generate SpaCy features (https://spacy.io) for question pairs data. 
     SpaCy create an embedding of each question and compute the similarity in that space.
     Features will be written in a csv file in path folder.
 

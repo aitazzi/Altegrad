@@ -8,7 +8,7 @@ def generate_pagerank(path):
     """
     Pagerank ranks the nodes in a graph structure, based on the linkages between them. 
     An edge shared with an important node makes it important as well.
-    In the Quora dataset context, every node is a question in our dataset and an edge represents a question pair.
+    In the question pairs context, every node is a question in our dataset and an edge represents a question pair.
 
     Args:
         path: folder containing train.csv and test.csv and to write csv features file.
