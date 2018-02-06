@@ -2,13 +2,14 @@
 
 ## Contact information
 Kaggle in-class team name: AitAzzi - Ohleyer - Sutton
+
 For any question/request related to this code, please send an email to on of these addresses: abderrahim.aitazzi@ens-paris-saclay.fr, sebastien.ohleyer@gmail.com, michael.sutton@student.ecp.fr.
 
 
 # Code organization
 
 ## Feature generation
-Each feature can be generated from the `feature_generation.ipynb` notebook. This notebook query a `.py` file in the directory feature_engineering.
+Each feature can be generated from the `feature_generation.ipynb` notebook. This notebook query `.py` files in the directory feature_engineering.
 
 Each `.py` computes their corresponding features and write them in a CSV file in the data directory. For simplicity, we directly provide CSV files containing every features. 
 
@@ -21,7 +22,8 @@ For each classifier fitting, a CSV file containing, the model, its parameters an
 
 ## Neural networks
 
+
 # Requirements
 Every package used in these codes were install with their latest version, except for:
-- NetworkX v1.11
+- NetworkX: v1.11
 
