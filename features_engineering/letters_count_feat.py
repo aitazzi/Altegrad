@@ -33,7 +33,6 @@ def generate_letters_count_features(path):
     
     train = train.drop(['qid1','qid2','id','question1','question2','is_duplicate'],axis=1)
     train.to_csv(os.path.join(path,'train_letters_count_feat.csv'))
-    print('CSV written ! see: ', path, " | suffix: ", "_count_feat.csv")
     
     #test features
     test =pd.read_csv(os.path.join(path,'test.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2"])

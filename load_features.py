@@ -106,8 +106,8 @@ def load_features(data_dir):
 	features_test[['q1_neigh','q2_neigh','common_neigh', 'distinct_neigh', 'clique_size', 'shortest_path']] = test_graph_feat[['q1_neigh','q2_neigh','common_neigh', 'distinct_neigh', 'clique_size', 'shortest_path']]
 
 	# Add bigram features
-	features_train[['bigram_coocurence','bigram_distinct','bigram_nostpwrd_coocurence','bigram_nostpwrd_distinct']] = train_bigram_feat[['bigram_coocurence','bigram_distinct','bigram_nostpwrd_coocurence','bigram_nostpwrd_distinct']]
-	features_test[['bigram_coocurence','bigram_distinct','bigram_nostpwrd_coocurence','bigram_nostpwrd_distinct']] = test_bigram_feat[['bigram_coocurence','bigram_distinct','bigram_nostpwrd_coocurence','bigram_nostpwrd_distinct']]
+	features_train[['2gram_cooccurence','2gram_distinct','2gram_nostpwrd_cooccurence','2gram_nostpwrd_distinct']] = train_bigram_feat[['2gram_cooccurence','2gram_distinct','2gram_nostpwrd_cooccurence','2gram_nostpwrd_distinct']]
+	features_test[['2gram_cooccurence','2gram_distinct','2gram_nostpwrd_cooccurence','2gram_nostpwrd_distinct']] = test_bigram_feat[['2gram_cooccurence','2gram_distinct','2gram_nostpwrd_cooccurence','2gram_nostpwrd_distinct']]
 
 	# Add 3gram features
 	features_train[['3gram_cooccurence','3gram_distinct','3gram_nostpwrd_cooccurence','3gram_nostpwrd_distinct']] = train_3gram_feat[['3gram_cooccurence','3gram_distinct','3gram_nostpwrd_cooccurence','3gram_nostpwrd_distinct']]
@@ -117,7 +117,7 @@ def load_features(data_dir):
 	features_train[['spacy_similarity']] = train_spacy_feat[['spacy_similarity']]
 	features_test[['spacy_similarity']] = test_spacy_feat[['spacy_similarity']]
 
-	# Add graph features2
+	# Add weighted graph features
 	features_train[['shortest_path_weighted']] = train_weightedgraph_feat[['shortest_path_weighted']]
 	features_test[['shortest_path_weighted']] = test_weightedgraph_feat[['shortest_path_weighted']]
 

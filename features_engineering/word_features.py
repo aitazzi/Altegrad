@@ -10,10 +10,9 @@ import os
 
 def generate_word_features(path):
 	"""
-	Generate basically question words features such as question lengths (and their difference), 
-	stopwords ratios, shared words, caps counts (and their difference), words lengths 
-	(and their difference), average words lengths (and their difference) and counts of 
-	special question words such as "What", "When", "Who"...
+	Generate basically question words counts like "What", "When", "Who"... and see if 
+	they are present in both questions of the pair.
+    Features will be written in a csv file in path folder.w
 
 	Args:
 	    path: folder containing train.csv and test.csv and to write csv features file.

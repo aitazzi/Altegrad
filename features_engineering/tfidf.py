@@ -9,12 +9,13 @@ import os
 
 def word_match_share(row, stops=None):
     """
-    This function compute the number of the shared words between the question1 and question2 excluding stop word, 
+    Computes the number of the shared words between the question1 and question2 excluding stopwords, 
     it is normalized by the total length of the question 1 and 2.
     Args:
-        path: folder containing train.csv and test.csv and to write csv features file.
+        row: question pair row
         stops: list of optional words to avoid.
     Return:
+        R: shared word count between the question1 and question2 excluding stopwords
     """
     q1words = {}
     q2words = {}
@@ -34,8 +35,12 @@ def word_match_share(row, stops=None):
 
 def jaccard(row):
     """
-    This function defines the jaccard index as the size of the intersection of q1 and q2 divided by the size of 
-    the union:
+    Defines the Jaccard index as the size of the intersection of q1 and q2 divided by the size of 
+    the union
+    Args:
+        row: question pair row
+    Return:
+        Jaccard index between the two questions of the pair.
     """
     wic = set(row['question1']).intersection(set(row['question2']))
     uw = set(row['question1']).union(row['question2'])
@@ -45,31 +50,52 @@ def jaccard(row):
     
 def common_words(row):
     """
-    This function computes the number of common words between q1 and q2
+    Computes the number of common words between q1 and q2.
+    Args:
+        row: question pair row
+    Return:
+        common words between the two questions of the row.
     """
     return len(set(row['question1']).intersection(set(row['question2'])))
 
 def total_unique_words(row):
     """
-    This function computes the number of unique words of q1 and q2 combined
+    Computes the number of unique words of q1 and q2 combined.
+    Args:
+        row: question pair row.
+    Return:
+        total unique words of q1 and q2 combined.
     """  
     return len(set(row['question1']).union(row['question2']))
 
 def total_unq_words_stop(row, stops):
     """
-    This function computes the number of unique words of q1 and q2 combined excluding stop words
+    Computes the number of unique words of q1 and q2 combined excluding stop words.
+    Args:
+        row: question pair row.
+        stops: list of optional words to avoid.
+    Return:
+        total unique words of q1 and q2 combined excluding stop words.
     """  
     return len([x for x in set(row['question1']).union(row['question2']) if x not in stops])
 
 def wc_diff(row):
     """
-    This function computes the difference of length between q1 and q2
+    Computes the difference of length between q1 and q2.
+    Args:
+        row: question pair row
+    Return:
+        word count difference
     """ 
     return abs(len(row['question1']) - len(row['question2']))
 
 def wc_ratio(row):   
     """
-    This function computes the ration of length between q1 and q2
+    Computes the ration of length between q1 and q2.
+    Args:
+        row: question pair row
+    Return:
+        word count ratio. 
     """ 
     l1 = len(row['question1'])*1.0 
     l2 = len(row['question2'])
@@ -82,11 +108,22 @@ def wc_ratio(row):
 
 def wc_diff_unique(row):
     """
-    This function computes the absolute difference of length between q1 and q2
+    Computes the absolute difference of length between q1 and q2.
+    Args:
+        row: question pair row.
+    Return: 
+        unique word count difference.
     """ 
     return abs(len(set(row['question1'])) - len(set(row['question2'])))
 
 def wc_ratio_unique(row):
+    """
+    Computes the ratio of length between q1 and q2.
+    Args:
+        row: question pair row.
+    Return:
+        unique word count ratio (between 0 and 1).
+    """
     l1 = len(set(row['question1'])) * 1.0
     l2 = len(set(row['question2']))
     if l2 == 0:
@@ -98,11 +135,24 @@ def wc_ratio_unique(row):
         
 def wc_diff_unique_stop(row, stops=None):
     """
-    This function computes the difference of length between q1 and q2 excluding stop words
+    Computes the difference of length between q1 and q2 excluding stop words.
+    Args:
+        row: question pair row.
+        stops: list of optional words to avoid.
+    Return:
+        word count difference.
     """
     return abs(len([x for x in set(row['question1']) if x not in stops]) - len([x for x in set(row['question2']) if x not in stops]))
  
 def wc_ratio_unique_stop(row, stops=None):
+    """
+    Computes the difference of length between q1 and q2 excluding stop words.
+    Args:
+        row: question pair row.
+        stops: list of optional words to avoid.
+    Return:
+        word count ratio excluding stopwords (between 0 and 1).
+    """
     l1 = len([x for x in set(row['question1']) if x not in stops])*1.0 
     l2 = len([x for x in set(row['question2']) if x not in stops])
     if l2 == 0:
@@ -114,7 +164,11 @@ def wc_ratio_unique_stop(row, stops=None):
 
 def same_start_word(row):
     """
-    This function is a bolean that computes weither q1 and q2 have the same start or not
+    Boolean that computes weither q1 and q2 have the same start or not.
+    Args:
+        row: question pair row.
+    Return:
+        Boolean if the two questions of the pair has the same start or not.
     """
     if not row['question1'] or not row['question2']:
         return np.nan
@@ -122,13 +176,22 @@ def same_start_word(row):
 
 def char_diff(row):
     """
-    This function returns the difference of length between the characters of q1 and q2
+    Returns the difference of length between the characters of q1 and q2.
+    Args:
+        row: question pair row.
+        stops: list of optional words to avoid.
+    Return:
+        character difference
     """
     return abs(len(''.join(row['question1'])) - len(''.join(row['question2'])))
 
 def char_ratio(row):
     """
-    This function returns the ratio of length between the characters of q1 and q2
+    Returns the ratio of length between the characters of q1 and q2.
+    Args:
+        row: question pair row.
+    Return:
+        character ration
     """
     l1 = len(''.join(row['question1'])) 
     l2 = len(''.join(row['question2']))
@@ -140,11 +203,24 @@ def char_ratio(row):
         return l1 / l2
 
 def char_diff_unique_stop(row, stops=None):
+    """
+    Returns the ratio of length between the characters of q1 and q2.
+    Args:
+        row: question pair row.
+    Return:
+        unique character difference
+    """
     return abs(len(''.join([x for x in set(row['question1']) if x not in stops])) - len(''.join([x for x in set(row['question2']) if x not in stops])))
 
 def get_weight(count, eps=10000, min_count=2):
     """
-    This function returns weights to attribute to words with high frequency
+    Returns weights to attribute to words with high frequency.
+    Args:
+        count: word count.
+        eps: value to avoid a division by zero.
+        min_count: minimum count to consider.
+    Return:
+        weight
     """
     if count < min_count:
         return 0
@@ -153,8 +229,15 @@ def get_weight(count, eps=10000, min_count=2):
 
 def tfidf_word_match_share_stops(row, stops=None, weights=None):
     """
-    This function returns the ratio of weights of shared words between q1 and q2 and the total weights (it is based
-    on attributing weights according to frequencies which explains the name tfidf). Here we exclude stop words
+    Returns the ratio of weights of shared words between q1 and q2 and the total weights (it is based
+    on attributing weights according to frequencies which explains the name tfidf). 
+    Here we exclude stop words.
+    Args:
+        count: word count.
+        stops: list of optional words to avoid.
+        weights: word weights.
+    Return:
+        R: TF-IDF word match share of the row without stopwords
     """  
     q1words = {}
     q2words = {}
@@ -176,7 +259,14 @@ def tfidf_word_match_share_stops(row, stops=None, weights=None):
 
 def tfidf_word_match_share(row, weights=None):
     """
-    This function has the same idea as the previous function but here we include stop words
+    Returns the ratio of weights of shared words between q1 and q2 and the total weights (it is based
+    on attributing weights according to frequencies which explains the name tfidf). 
+    Here we include stop words.
+    Args:
+        count: word count.
+        weights: word weights.
+    Return:
+        R: TF-IDF word match share of the row.
     """
     q1words = {}
     q2words = {}
@@ -196,7 +286,12 @@ def tfidf_word_match_share(row, weights=None):
 
 def build_features(data, stops, weights):
     """
-    This function allows to organize the different features in a pandas table in order to add theme to the data
+    Organize the different features in a pandas table in order to add theme to the data.
+    Args:
+        count: word count.
+        weights: word weights.
+    Return:
+        X: feature matrix.
     """
     X = pd.DataFrame()
 
@@ -234,7 +329,6 @@ def build_features(data, stops, weights):
     X['char_diff_unq_stop'] = data.apply(f, axis=1, raw=True) #13
 
     print('total_unique_words')
-#     X['common_words'] = data.apply(common_words, axis=1, raw=True)  #14
     X['total_unique_words'] = data.apply(total_unique_words, axis=1, raw=True)  #15
 
     print('total_unq_words_stop')
@@ -248,6 +342,18 @@ def build_features(data, stops, weights):
 
 
 def generate_tfidf(path): 
+    """
+    Computes some weighted word match with TF-IDF (with and without stopwords),
+    Jaccard index between question but also word counts difference and ratio 
+    (with and without stop-words), unique word count, character counts difference 
+    and ratio, unique character count.
+    Features will be written in a csv file in path folder.
+    
+    Args:
+        path: folder containing train.csv and test.csv and to write csv features file.
+    Return:
+    
+    """
     df_train =pd.read_csv(os.path.join(path,'train.csv'), sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
     df_train = df_train.fillna(' ')
 
@@ -292,6 +398,7 @@ def generate_tfidf(path):
     words = [x for y in train_qs for x in y]
     counts = Counter(words)
     weights = {word: get_weight(count) for word, count in counts.items()}
+
 
     print('Building Features :')
     x_train = build_features(df_train, stops, weights)

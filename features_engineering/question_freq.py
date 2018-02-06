@@ -13,8 +13,8 @@ import os
 
 def generate_question_freq(path):
     """
-    Generate question frequencies for Quora questions data. More frequent questions 
-    are more likely to be duplicates.
+    Generate question frequencies and questions unique indexes for Quora questions data. 
+    More frequent questions are more likely to be duplicates.
 
     Features will be written in a csv file in path folder.
 
@@ -59,7 +59,7 @@ def generate_question_freq(path):
     # Concatenation
     comb = pd.concat([train_cp,test_cp])
 
-    # Map the question to its index
+    # Map the question to its unique index
     comb['q1_hash'] = comb['question1'].map(questions_dict)
     comb['q2_hash'] = comb['question2'].map(questions_dict)
 
