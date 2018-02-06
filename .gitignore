@@ -5,8 +5,10 @@ submission_file.csv
 features_engineering/__pycache__/
 floydhub/
 __pycache__/
-
+*.pyc
 .floydexpt
 .floydignore
 feature_importance.eps
 data/.floyddata
+
+.DS_Store
