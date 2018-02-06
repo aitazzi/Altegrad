@@ -1,17 +1,23 @@
 from gensim.models import KeyedVectors
+from fuzzywuzzy import fuzz
+from nltk.corpus import stopwords
+from tqdm import tqdm
+from scipy.stats import skew, kurtosis
+from scipy.spatial.distance import cosine, cityblock, jaccard, canberra, euclidean, minkowski, braycurtis
+from nltk import word_tokenize
 import pandas as pd
+import numpy as np
+import pickle
+stop_words = stopwords.words('english')
 
-
-def generate_glove_features(path, word2vec_filepath, googlenews_filepath):
+def generate_glove_features(path, word2vec_glove_filepath):
 	"""
-    Generate glove features for Quora questions data. 
+    Generate glove features features for Quora question data. 
     Features will be written in a csv file in path folder.
 
     Args:
         path: folder containing train.csv and test.csv and to write csv features file.
-        word2vec_filepath: path to word2vec file.
-        googlenews_filepath: path to Google News file.
-
+        word2vec_filepath: path to word2vec Glove file.
     Return:
         
     """
@@ -43,9 +49,7 @@ def generate_glove_features(path, word2vec_filepath, googlenews_filepath):
 
 
     # Import embedding model
-	word_embedding_model_glove = KeyedVectors.load_word2vec_format(word2vec_filepath, binary=False)
-	model = gensim.models.KeyedVectors.load_word2vec_format(googlenews_filepath, binary=True)
-
+	word_embedding_model_glove = KeyedVectors.load_word2vec_format(word2vec_glove_filepath, binary=False)
     # Load training and test set
 	data_train = pd.read_csv('data/train.csv', sep=',',names = ["id", "qid1", "qid2", "question1","question2","is_duplicate"])
 	data_train = data_train.drop(['id', 'qid1', 'qid2'], axis=1)

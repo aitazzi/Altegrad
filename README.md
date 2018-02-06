@@ -9,12 +9,12 @@ For any question/request related to this code, please send an email to on of the
 # Code organization
 
 ## Feature generation
-Each feature can be generated from the `feature_generation.ipynb` notebook. This notebook query `.py` files in the directory feature_engineering.
+Each feature can be generated from the `Feature_generation.ipynb` notebook. This notebook query `.py` files in the directory feature_engineering.
 
 Each `.py` computes their corresponding features and write them in a CSV file in the data directory. For simplicity, we directly provide CSV files containing every features. 
 
 ## LightGB
-Use the `lighb_classification.ipynb` notebook to perform classification. Our parameters leading to our best submission are provided in this notebook (a random initialization of the model set apart).
+Use the `Lightgb_classification.ipynb` notebook to perform classification. Our parameters leading to our best submission are provided in this notebook (a random initialization of the model set apart).
 
 This notebook calls the function `load_features.py` which load features from every CSV files in the data directory and combine them in a unique pandas DataFrame.
 
