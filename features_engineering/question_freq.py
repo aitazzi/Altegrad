@@ -13,7 +13,7 @@ import os
 
 def generate_question_freq(path):
     """
-    Generate question frequencies and questions unique indexes for Quora questions data. 
+    Generate question frequencies and questions unique indexes for question pairs data.  
     More frequent questions are more likely to be duplicates.
 
     Features will be written in a csv file in path folder.

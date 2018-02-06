@@ -346,7 +346,7 @@ def generate_tfidf(path):
     Computes some weighted word match with TF-IDF (with and without stopwords),
     Jaccard index between question but also word counts difference and ratio 
     (with and without stop-words), unique word count, character counts difference 
-    and ratio, unique character count.
+    and ratio, unique character count for question pairs data. 
     Features will be written in a csv file in path folder.
     
     Args:

@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 def generate_cooccurence_distinct_ngram(path, n=2):
     """
-    Generate n-gram features (with and without stopwords removed) for Quora questions data. 
+    Generate n-gram features (with and without stopwords removed) for question pairs data. 
     Features will be written in a csv file in path folder.
 
     Args:

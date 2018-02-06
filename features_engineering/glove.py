@@ -12,7 +12,7 @@ stop_words = stopwords.words('english')
 
 def generate_glove_features(path, word2vec_glove_filepath):
 	"""
-    Generate glove features features for Quora question data. 
+    Generate glove features features for question pairs data. 
     Features will be written in a csv file in path folder.
 
     Args:

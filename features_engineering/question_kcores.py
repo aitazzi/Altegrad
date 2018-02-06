@@ -6,7 +6,7 @@ import os
 
 def generate_question_kcores(path):
 	"""
-	Generate weighted graph features based on k-cores for Quora question data:
+	Generate weighted graph features based on k-cores for question pairs data:
 	largest subgraph where every node is connected to at least “k” nodes for each question of the pair,
 	ratio, difference and normed difference.
 	Features will be written in a csv file in path folder.
