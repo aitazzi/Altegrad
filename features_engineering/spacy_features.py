@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 from tqdm import tqdm
+import spacy
 
 
 def generate_spacy_features(path):
@@ -25,6 +26,9 @@ def generate_spacy_features(path):
     test = test.drop(['id','qid1','qid2'], axis=1)
 
     train['spacy_similarity'] = np.nan
+
+    # Load English tokenizer, tagger, parser, NER and word vectors
+    nlp = spacy.load('en')
 
     print('Applying to train...')
     for index,row in tqdm(train.iterrows()):
