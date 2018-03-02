@@ -1,5 +1,11 @@
 # ALTEGRAD Challenge Fall 2018
 
+This repo is about the Kaggle in-class challenge https://www.kaggle.com/c/altegrad-challenge-fall-17
+
+This challenge was inspired by the Quora dataset challenge https://www.kaggle.com/c/quora-question-pairs
+
+We finish at the #1 place on the Private and Public leaderboard.
+
 ## Contact information
 Kaggle in-class team name: AitAzzi - Ohleyer - Sutton
 
